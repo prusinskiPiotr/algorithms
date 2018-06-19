@@ -30,11 +30,11 @@ def follow_progress():
     best = 0
     newscore = score_the_strings(correct_sentence, newstring)
     while float(newscore) < 100.00:
-        print(newscore, newstring)
         if newscore >= best:
             print(newscore, newstring)
-            print(best)
+            best = newscore
         newstring = generate_random_string(28)
+        newscore = score_the_strings(correct_sentence, newstring)
     else:
         print('Program finished')
 
