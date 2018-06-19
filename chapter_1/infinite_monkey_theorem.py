@@ -28,11 +28,16 @@ def follow_progress():
     correct_sentence = 'methinks it is like a weasel'
     newstring = generate_random_string(28)
     best = 0
+    iteration = 0
     newscore = score_the_strings(correct_sentence, newstring)
     while float(newscore) < 100.00:
         if newscore >= best:
             print(newscore, newstring)
             best = newscore
+            iteration = iteration + 1
+            if iteration == 10:
+                # print(f'n-1000th iteration score: {str(newscore)} {newstring}')
+                iteration = 0
         newstring = generate_random_string(28)
         newscore = score_the_strings(correct_sentence, newstring)
     else:
