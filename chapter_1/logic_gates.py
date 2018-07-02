@@ -72,6 +72,36 @@ class OrGate(BinaryGate):
             return 0
 
 
+class NandGate(BinaryGate):
+
+    def __init__(self, n):
+        BinaryGate.__init__(self, n)
+
+    def performGateLogic(self):
+
+        a = self.getPinA()
+        b = self.getPinB()
+        if a == 1 and b == 1:
+            return 0
+        else:
+            return 1
+
+
+class NorGate(BinaryGate):
+
+    def __init__(self, n):
+        BinaryGate.__init__(self, n)
+
+    def performGateLogic(self):
+
+        a = self.getPinA()
+        b = self.getPinB()
+        if a or b == 1:
+            return 0
+        else:
+            return 1
+
+
 class UnaryGate(LogicGate):
 
     def __init__(self, n):
@@ -120,13 +150,25 @@ class Connector:
 
 
 def main():
-    g1 = AndGate("G1")
-    g2 = AndGate("G2")
-    g3 = OrGate("G3")
-    g4 = NotGate("G4")
-    c1 = Connector(g1, g3)
-    c2 = Connector(g2, g3)
-    c3 = Connector(g3, g4)
-    print(g4.getOutput())
+
+    # NOT (( A and B) or (C and D))
+    gate1 = AndGate("Gate 1")
+    gate2 = AndGate("Gate 2")
+    gate3 = OrGate("Gate 3")
+    gate4 = NotGate("Gate 4")
+    cnn1 = Connector(gate1, gate3)
+    cnn2 = Connector(gate2, gate3)
+    cnn3 = Connector(gate3, gate4)
+    print(gate4.getOutput())
+
+    # NOT( A and B ) and NOT (C and D)
+    g1 = NandGate("G1")
+    g2 = NandGate("G2")
+    g3 = AndGate("G3")
+    connector1 = Connector(gt1, gt3)
+    connector2 = Connector(gt2, gt3)
+    print(gt3.getOutput())
+
+
 
 main()
