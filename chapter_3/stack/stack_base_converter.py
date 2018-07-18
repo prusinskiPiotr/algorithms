@@ -15,7 +15,10 @@ def baseConverter(decNumber, base):
 
     return newString
 
-print(baseConverter(233, 2))
-print(baseConverter(233, 8))
-print(baseConverter(233, 16))
+# print(baseConverter(233, 2))
+# print(baseConverter(233, 8))
+# print(baseConverter(233, 16))
+print(baseConverter(25, 8))
+print(baseConverter(256, 16))
+print(baseConverter(26, 26))
 
