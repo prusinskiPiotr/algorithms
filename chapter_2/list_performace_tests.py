@@ -1,5 +1,5 @@
-from threading import Timer
 import timeit
+import random
 
 def test1():
     l = []
@@ -37,3 +37,14 @@ for i in range(1000000,100000001,1000000):
     x = list(range(i))
     pz = popzero.timeit(number=1000)
     print("%15.5f, %15.5f" %(pz, pt))
+
+# comparison between list and dictionary of the contains operator
+# dictionary is O(1), list is O(n)
+print("iteration   list    dictionary")
+for i in range(10000,1000001,20000):
+    t = timeit.Timer("random.randrange(%d) in x"%i, "from __main__ import random, x")
+    x = list(range(i))
+    lst_time = t.timeit(number=1000)
+    x = {j:None for j in range(i)}
+    d_time = t.timeit(number=1000)
+    print("%d,%10.3f,%10.3f" % (i, lst_time, d_time))
