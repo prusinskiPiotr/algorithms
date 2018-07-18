@@ -1,18 +1,21 @@
 from stack import Stack
 
-def divideByTwo(decNumber):
+def baseConverter(decNumber, base):
+    digits = "0123456789ABCDEF"
     remstack = Stack()
 
     while decNumber > 0:
-        rem = decNumber % 2
+        rem = decNumber % base
         remstack.push(rem)
-        decNumber = decNumber // 2
+        decNumber = decNumber // base
 
-    binString = ""
+    newString = ""
     while not remstack.isEmpty():
-        binString = binString + str(remstack.pop())
+        newString = newString + digits[remstack.pop()]
 
-    return binString
+    return newString
 
-print(divideByTwo(233))
+print(baseConverter(233, 2))
+print(baseConverter(233, 8))
+print(baseConverter(233, 16))
 
