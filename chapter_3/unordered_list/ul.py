@@ -64,10 +64,50 @@ class UnorderedList:
                 current = current.getNext()
 
         if previous == None:
-            self. head = current.getNext()
+            self.head = current.getNext()
         else:
             previous.setNext(current.getNext())
 
     def append(self, item):
+        current = self.head
+        previous = None
+        temp = Node(item)
+        while current != None:
+            previous = current
+            current = current.getNext()
+
+        previous.setNext(temp)
+
+    def insert(self, pos, item):
+        current = self.head
+        previous = None
+        count = 1
+        temp = Node(item)
+        while current != pos:
+            count = count + 1
+            previous = current
+            current = current.getNext()
         
+        previous.setNext(temp)
+
+    def index(self, item):
+        current = self.head
+        index = 0
+        while current != item:
+            index = index + 1
+            current = current.getNext()
+        return index
+
+    def pop(self, pos):
+        current = self.head
+        count = 0
+        while count != pos
+            count = count +1
+            current = current.getNext()
+        return remove(current)
+
+
+
+        
+
     
