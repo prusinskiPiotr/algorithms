@@ -92,21 +92,38 @@ class UnorderedList:
 
     def index(self, item):
         current = self.head
-        index = 0
-        while current != item:
-            index = index + 1
-            current = current.getNext()
-        return index
-
-    def pop(self, pos):
-        current = self.head
         count = 0
-        while count != pos
-            count = count +1
+        while current.getData() != item:
+            count = count + 1
             current = current.getNext()
-        return remove(current)
+        return count
+
+    # def pop(self, pos):
+    #     current = self.head
+    #     count = 0
+    #     while count != pos:
+    #         count = count + 1
+    #         current = current.getNext()
+    #     popValue = current.getData()
+    #     self.remove(current)
+    #     return popValue
 
 
+mylist = UnorderedList()
+
+mylist.add(31)
+mylist.add(77)
+mylist.add(17)
+mylist.add(93)
+mylist.add(26)
+mylist.add(54)
+
+print(mylist.size())
+print(mylist.search(93))
+print(mylist.search(100))
+# print(mylist.pop(0))
+# print(mylist.size())
+print(mylist.index(31))
 
         
 
