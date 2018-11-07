@@ -78,35 +78,39 @@ class UnorderedList:
 
         previous.setNext(temp)
 
-    def insert(self, pos, item):
-        current = self.head
-        previous = None
-        count = 1
-        temp = Node(item)
-        while current != pos:
-            count = count + 1
-            previous = current
-            current = current.getNext()
-        
-        previous.setNext(temp)
 
     def index(self, item):
         current = self.head
         count = 0
-        while current.getData() != item:
-            count = count + 1
-            current = current.getNext()
-        return count
+        try:
+            while current.getData() != item:
+                count = count + 1
+                current = current.getNext()
+            else:
+                return count
+        except AttributeError:
+            return None
 
-    # def pop(self, pos):
+    # def insert(self, pos):
     #     current = self.head
     #     count = 0
     #     while count != pos:
     #         count = count + 1
     #         current = current.getNext()
-    #     popValue = current.getData()
-    #     self.remove(current)
-    #     return popValue
+    #     return current.getData()
+
+
+    # def pop(self, pos):
+    #     current = self.head
+    #     previous = None
+    #     count = 1
+    #     temp = Node(item)
+    #     while current != pos:
+    #         count = count + 1
+    #         previous = current
+    #         current = current.getNext()
+        
+    #     previous.setNext(temp)
 
 
 mylist = UnorderedList()
@@ -121,9 +125,12 @@ mylist.add(54)
 print(mylist.size())
 print(mylist.search(93))
 print(mylist.search(100))
+print(mylist.remove(93))
 # print(mylist.pop(0))
-# print(mylist.size())
-print(mylist.index(31))
+# print(mylist.insert(3))
+print(mylist.index(1))
+print(mylist.size())
+# print(mylist.index(31))
 
         
 
