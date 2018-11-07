@@ -23,6 +23,8 @@ class UnorderedList:
     # each linked to the next by explicit references
     def __init__(self):
         self.head = None
+        self.tail = None
+        self.length = 0
 
     def is_empty(self):
         return self.head == None
@@ -91,13 +93,21 @@ class UnorderedList:
         except AttributeError:
             return None
 
-    # def insert(self, pos):
-    #     current = self.head
-    #     count = 0
-    #     while count != pos:
-    #         count = count + 1
-    #         current = current.getNext()
-    #     return current.getData()
+    def insert(self, pos, item):
+        current = self.head
+        previous = None
+        count = 0
+        temp = Node(item)
+        while count is not pos and current is not None:
+            previous = current
+            current = current.getNext()
+            count = count + 1
+        if previous is None:
+            temp.setNext(self.head)
+            self.head = temp
+        else:
+            temp.setNext(current)
+            previous.setNext(temp)
 
 
     # def pop(self, pos):
@@ -123,12 +133,14 @@ mylist.add(26)
 mylist.add(54)
 
 print(mylist.size())
-print(mylist.search(93))
-print(mylist.search(100))
-print(mylist.remove(93))
+# print(mylist.search(93))
+# print(mylist.search(100))
+# print(mylist.remove(93))
 # print(mylist.pop(0))
-# print(mylist.insert(3))
-print(mylist.index(1))
+print(mylist.insert(0, 22))
+print(mylist.index(22))
+print(mylist.search(22))
+# print(mylist.index(1))
 print(mylist.size())
 # print(mylist.index(31))
 
