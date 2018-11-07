@@ -22,7 +22,23 @@ class OrderedList:
         self.head = None
 
     def add(self, item):
-        pass
+        current = self.head
+        previous = None
+        stop = False
+        while current != None and not stop:
+            if current.getData() > item:
+                stop = True
+            else:
+                previous = current
+                current = current.getNext()
+        
+        temp = Node(item)
+        if previous == None:
+            temp.setNext(self.head)
+            self.head = temp
+        else:
+            temp.setNext(current)
+            previous.setNext(temp)
 
     def remove(self, item):
         current = self.head
@@ -72,3 +88,16 @@ class OrderedList:
 
     def pop(self, pos):
         pass
+
+
+mylist = OrderedList()
+mylist.add(31)
+mylist.add(77)
+mylist.add(17)
+mylist.add(93)
+mylist.add(26)
+mylist.add(54)
+
+print(mylist.size())
+print(mylist.search(93))
+print(mylist.search(100))
