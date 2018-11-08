@@ -24,7 +24,6 @@ class UnorderedList:
     def __init__(self):
         self.head = None
         self.tail = None
-        self.length = 0
 
     def is_empty(self):
         return self.head == None
@@ -80,7 +79,6 @@ class UnorderedList:
 
         previous.setNext(temp)
 
-
     def index(self, item):
         current = self.head
         count = 0
@@ -110,17 +108,22 @@ class UnorderedList:
             previous.setNext(temp)
 
 
-    # def pop(self, pos):
-    #     current = self.head
-    #     previous = None
-    #     count = 1
-    #     temp = Node(item)
-    #     while current != pos:
-    #         count = count + 1
-    #         previous = current
-    #         current = current.getNext()
-        
-    #     previous.setNext(temp)
+    def pop(self, pos=None):
+        if pos == None:
+            pos = self.size() - 1
+        current = self.head
+        previous = None
+        count = 0
+        while count is not pos:
+            previous = current
+            current = current.getNext()
+            count = count + 1
+        if previous is None:
+            self.head = current.getNext()
+        else:
+            previous.setNext(current.getNext())
+        return current.getData()
+
 
 
 mylist = UnorderedList()
@@ -136,11 +139,13 @@ print(mylist.size())
 # print(mylist.search(93))
 # print(mylist.search(100))
 # print(mylist.remove(93))
-# print(mylist.pop(0))
 print(mylist.insert(0, 22))
 print(mylist.index(22))
 print(mylist.search(22))
 # print(mylist.index(1))
+print(mylist.size())
+print(mylist.pop())
+print(mylist.pop(1))
 print(mylist.size())
 # print(mylist.index(31))
 

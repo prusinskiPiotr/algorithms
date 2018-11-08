@@ -83,10 +83,7 @@ class OrderedList:
     def index(self, item):
         pass
 
-    def pop(self):
-        pass
-
-    def pop(self, pos):
+    def pop(self, pos=None):
         pass
 
 
