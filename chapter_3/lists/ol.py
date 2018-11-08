@@ -81,10 +81,32 @@ class OrderedList:
         return count
 
     def index(self, item):
-        pass
+        current = self.head
+        count = 0
+        try:
+            while current.getData() != item:
+                count = count + 1
+                current = current.getNext()
+            else:
+                return count
+        except AttributeError:
+            return None
 
     def pop(self, pos=None):
-        pass
+        if pos == None:
+            pos = self.size() - 1
+        current = self.head
+        previous = None
+        count = 0
+        while count is not pos:
+            previous = current
+            current = current.getNext()
+            count = count + 1
+        if previous is None:
+            self.head = current.getNext()
+        else:
+            previous.setNext(current.getNext())
+        return current.getData()
 
 
 mylist = OrderedList()
@@ -98,3 +120,7 @@ mylist.add(54)
 print(mylist.size())
 print(mylist.search(93))
 print(mylist.search(100))
+print(mylist.pop())
+print(mylist.search(93))
+print(mylist.size())
+print(mylist.index(31))
