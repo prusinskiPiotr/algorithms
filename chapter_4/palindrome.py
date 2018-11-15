@@ -17,3 +17,5 @@ def isPalindrome(s):
 
 print(isPalindrome('kajak'))
 print(isPalindrome('arbiter'))
+print(isPalindrome("Go hang a salami; I'm a lasagna hog."))
+print(isPalindrome("Go hang a salami; I'm a baloney maloney."))
