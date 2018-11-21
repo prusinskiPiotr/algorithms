@@ -1,0 +1,17 @@
+from pythonds.graphs import graphs
+
+def knightGraph(bdSize):
+    ktGraph = Graph()
+    for row in range(bdSize):
+        for col in range(bdSize):
+            nodeId = posToNodeId(row, col, bdSize)
+            newPositions = genLegalMoves(row, col, bdSize)
+            for e in newPositions:
+                nid = posToNodeId(e[0], e[1], bdSize)
+                ktGraph.addEdge(nodeId, nid)
+        return ktGraph
+
+def posToNodeId(row, column, board_size):
+    return (row * board_size) + column
+
+
