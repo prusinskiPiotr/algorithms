@@ -6,6 +6,7 @@ steps that I need to take to implement a*:
 4. Profit
 """
 import collections
+# from implementation import *
 
 
 class SimpleGraph:
@@ -32,7 +33,7 @@ class SquareGrid:
     def neighbours(self, index):
         (x, y) = index
         results = [(x+1, y), (x, y-1), (x-1, y), (x, y+1)]
-        if (x + y) % 2 == 0: result.reverse()
+        if (x + y) % 2 == 0: results.reverse()
         results = filter(self.in_bounds, results)
         results = filter(self.passable, results)
         return results
@@ -100,10 +101,27 @@ def breadth_first_search_1(graph, start):
                 frontier.put(next)
                 visited[next] = True
 
+def breadth_first_search_2(graph, start):
+    # return "came_from"
+    frontier = Queue()
+    frontier.put(start)
+    came_from = {}
+    came_from[start] = None
+    
+    while not frontier.empty():
+        current = frontier.get()
+        for next in graph.neighbours(current):
+            if next not in came_from:
+                frontier.put(next)
+                came_from[next] = current
+    
+    return came_from
 
 # breadth_first_search_1(example_graph, 'A')
 DIAGRAM1_WALLS = [from_id_width(id, width=30) for id in [21,22,51,52,81,82,93,94,111,112,123,124,133,134,141,142,153,154,163,164,171,172,173,174,175,183,184,193,194,201,202,203,204,205,213,214,223,224,243,244,253,254,273,274,283,284,303,304,313,314,333,334,343,344,373,374,403,404,433,434]]
 g = SquareGrid(30, 15)
 g.walls = DIAGRAM1_WALLS
-draw_grid(g)
+
+parents = breadth_first_search_2(g, (8, 7))
+draw_grid(g, width=2, point_to=parents, start=(8, 7))
 
