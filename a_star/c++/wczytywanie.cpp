@@ -11,7 +11,7 @@ string nazwap="grid.txt";
 int wym2=20;
 int wym1=20;
 
-//teraz deklarujemy dynamicznie tablice do, której wczytamyu nasz plik,
+//teraz deklarujemy dynamicznie tablice do, ktï¿½rej wczytamyu nasz plik,
 int rows = wym2+1;
 double **G;
 G = new double*[rows];
@@ -40,7 +40,7 @@ for(int i=1;i<wym2+1;i++)
    }cout<<"\n";
  }
    
-//na koniec czyœcimy pamiêæ po naszej tablicy
+//na koniec czyï¿½cimy pamiï¿½ï¿½ po naszej tablicy
 for(int i=0;i<wym2+1;i++)
 {delete[] G[i];}//czyscimy wiersze
 delete[] G;//zwalniamy tablice wskaznikow do wierszy
