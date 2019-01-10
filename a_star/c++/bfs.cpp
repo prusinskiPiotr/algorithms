@@ -65,3 +65,111 @@ ostream &operator<<(ostream &stream, Vertex &vert){
 
     return stream;
 }
+
+
+class Graph{
+    public:
+        map<string, Vertex> vertList;
+        int numVertices;
+        bool directional;
+
+        Graph(bool directed = true){
+            directional = directed;
+            numVertices = 0;
+        }
+
+        Vertex addVertex(string key){
+            numVertices++;
+            Vertex newVertex = Vertex(key);
+            this->vertList[key] = newVertex;
+            return newVertex;
+        }
+
+        Vertex *getVertex(string n){
+            return &vertList[n];
+        }
+
+        bool contains(string n){
+            for (map<string, Vertex>::iterator it = vertList.begin();
+            it != vertList.end();
+            ++it){
+                if (it->first == n){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void addEdge(string f, string t, float cost = 1){
+            if (!this->contains(f)){
+                this->addVertex(f);
+            }
+            if (!this->contains(t)){
+                this->addVertex(t);
+            }
+            vertList[f].addNeighbour(t, cost);
+
+            if (!directional){
+                vertList[t].addNeighbour(f, cost);
+            }
+        }
+
+        vector<string> getVertices(){
+            vector<string> verts;
+
+            for (map<string, Vertex>::iterator it = vertList.begin();
+            it != vertList.end();
+            ++it){
+                verts.push_back(it->first);
+            }
+            return verts;
+        }
+
+        friend ostream &operator<<(ostream &, Graph &);
+};
+
+ostream &operator<<(ostream &stream, Graph &grph){
+    for (map<string, Vertex>::iterator it = grph.vertList.begin();
+    it != grph.vertList.end();
+    ++it){
+        stream << grph.vertList[it->first];
+        cout << endl;
+    }
+
+    return stream;
+}
+
+string getBlank(string str, int index){
+    string blank = str;
+    blank[index] = '_';
+    return blank;
+}
+
+Graph buildGraph(vector<string> words){
+    Graph g(false);
+
+    map<string, vector<string>> d;
+
+    // go through with the words
+    for (unsigned int i = 0; i < words.size(); i++){
+        // Go through each letter, making it blank
+        for (unsigned int j = 0; j < words.size(); j++){
+            string bucket = getBlank(words[i], j);
+            // Add the word to the map at the location of the blank
+            d[bucket].push_back(words[i]);
+        }
+    }
+
+    for (map<string, vector<string>>::iterator iter = d.begin();
+        iter != d.end();
+        ++iter){
+            for (unsigned int i = 0; i < iter->second.size(); i++){
+                for (unsigned int j = 0; j < iter->second.size(); j++){
+                    if (iter->second[i] != iter->second[j]){
+                        g.addEdge(iter->second[i], iter->second[j]);
+                    }
+                }
+            }
+        }
+    return g;
+}
