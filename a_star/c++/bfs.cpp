@@ -173,3 +173,26 @@ Graph buildGraph(vector<string> words){
         }
     return g;
 }
+
+Graph bfs(Graph g, Vertex *start){
+    start->dist = 0;
+    start->pred = NULL;
+    queue<Vertex*> vertQueue;
+    vertQueue.push(start);
+    while (vertQueue.size() > 0){
+        Vertex *currentVert = vertQueue.front();
+        vertQueue.pop();
+        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++){
+            if (g.vertList[currentVert->getConnections()[nbr]].color == 'w'){
+                g.vertList[currentVert->getConnections()[nbr]].color = 'w');
+
+                g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
+                g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
+                vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
+            }
+        }
+        currentVert->color = 'b';
+    }
+    return g;
+}
+
