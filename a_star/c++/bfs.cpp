@@ -184,11 +184,11 @@ Graph bfs(Graph g, Vertex *start){
         vertQueue.pop();
         for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++){
             if (g.vertList[currentVert->getConnections()[nbr]].color == 'w'){
-                g.vertList[currentVert->getConnections()[nbr]].color = 'g';
+                    g.vertList[currentVert->getConnections()[nbr]].color = 'g';
 
-                g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
-                g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
-                vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
+                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
+                    g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
+                    vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
             }
         }
         currentVert->color = 'b';
