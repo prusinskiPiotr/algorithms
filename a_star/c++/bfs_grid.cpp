@@ -224,6 +224,9 @@ vector<int> genLegalMoves(int id, int bdSize) {
 Graph knightGraph(int bdSize) {
     Graph ktGraph(false);
 
+    string nazwap="grid.txt";
+    std::ifstream plik(nazwap.c_str());
+
     for (int row = 0; row < bdSize; row++) {
         for (int col = 0; col < bdSize; col++) {
             int nodeId = coordToNum(row, col, bdSize);
@@ -239,10 +242,10 @@ Graph knightGraph(int bdSize) {
 }
 
 int main() {
-    Graph kt = knightGraph(8);
+    Graph kt = knightGraph(20);
 
-    kt = bfs(kt, kt.getVertex(63));
-    traverse(kt.getVertex(0));
+    kt = bfs(kt, kt.getVertex(42));
+    traverse(kt.getVertex(27));
 
     return 0;
 }
