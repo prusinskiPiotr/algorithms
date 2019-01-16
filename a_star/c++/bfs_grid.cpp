@@ -10,7 +10,6 @@ class Vertex {
 public:
     int id;
     map<int, float> connectedTo;
-    // Added for Breadth-First Algorithm
     char color;
     float dist;
     Vertex *pred;
@@ -69,10 +68,8 @@ class Graph {
 public:
     map<int, Vertex> vertList;
     int numVertices;
-    bool directional;
 
-    Graph(bool directed = true) {
-        directional = directed;
+    Graph() {
         numVertices = 0;
     }
 
@@ -106,10 +103,7 @@ public:
             this->addVertex(t);
         }
         vertList[f].addNeighbor(t, cost);
-
-        if (!directional) {
-            vertList[t].addNeighbor(f, cost);
-        }
+        vertList[t].addNeighbor(f, cost);
     }
 
     vector<int> getVertices() {
@@ -222,7 +216,7 @@ vector<int> genLegalMoves(int id, int bdSize) {
 }
 
 Graph knightGraph(int bdSize) {
-    Graph ktGraph(false);
+    Graph ktGraph;
 
     string nazwap="grid.txt";
     std::ifstream plik(nazwap.c_str());
