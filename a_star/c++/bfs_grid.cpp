@@ -28,7 +28,7 @@ public:
         pred = NULL;
     }
 
-    void addNeighbor(int nbr, float weight = 1) {
+    void addNeighbour(int nbr, float weight = 1) {
         connectedTo[nbr] = weight;
     }
 
@@ -102,8 +102,8 @@ public:
         if (!this->contains(t)) {
             this->addVertex(t);
         }
-        vertList[f].addNeighbor(t, cost);
-        vertList[t].addNeighbor(f, cost);
+        vertList[f].addNeighbour(t, cost);
+        vertList[t].addNeighbour(f, cost);
     }
 
     vector<int> getVertices() {
@@ -142,13 +142,10 @@ Graph bfs(Graph g, Vertex *start) {
         for (unsigned int nbr = 0; nbr < currentVert->getConnections().size();
              nbr++) {
             if (g.vertList[currentVert->getConnections()[nbr]].color == 'w') {
-                g.vertList[currentVert->getConnections()[nbr]].color = 'g';
-
-                g.vertList[currentVert->getConnections()[nbr]].dist =
-                    currentVert->dist + 1;
-                g.vertList[currentVert->getConnections()[nbr]].pred =
-                    currentVert;
-                vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
+                    g.vertList[currentVert->getConnections()[nbr]].color = 'g';
+                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
+                    g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
+                    vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
             }
         }
         currentVert->color = 'b';
@@ -186,8 +183,8 @@ pair<int, int> numToCoord(int id, int bdSize) {
 	return make_pair(x, y);
 }
 
-bool legalCoord(int x, int bdSize) {
-	if (x >= 0 && x < bdSize) {
+bool legalCoord(int pos, int bdSize) {
+	if (pos >= 0 && pos < bdSize) {
 		return true;
 	} else {
 		return false;
@@ -215,11 +212,8 @@ vector<int> genLegalMoves(int id, int bdSize) {
     return newMoves;
 }
 
-Graph knightGraph(int bdSize) {
+Graph generateGraph(int bdSize) {
     Graph ktGraph;
-
-    string nazwap="grid.txt";
-    std::ifstream plik(nazwap.c_str());
 
     for (int row = 0; row < bdSize; row++) {
         for (int col = 0; col < bdSize; col++) {
@@ -236,10 +230,10 @@ Graph knightGraph(int bdSize) {
 }
 
 int main() {
-    Graph kt = knightGraph(20);
+    Graph grid = generateGraph(20);
 
-    kt = bfs(kt, kt.getVertex(42));
-    traverse(kt.getVertex(27));
+    grid = bfs(grid, grid.getVertex(42));
+    traverse(grid.getVertex(27));
 
     return 0;
 }
