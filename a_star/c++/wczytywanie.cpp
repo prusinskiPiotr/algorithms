@@ -1,44 +1,61 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
+
+int coordToNum(int x, int y, int bdSize) {
+    // Takes the x y position and returns the id from 0 to (bdSize*2)-1
+    int id = 0;
+    id += y * bdSize;
+    id += x;
+    return id;
+}
 
 int main (void) {
 
 	cout<<"Wczytywanie danych z pliku\n";
 
 	string nazwap="grid.txt";
-	int wym2=20;
-	int wym1=20;
-
+	int bdSize=20;
+	
 	//teraz deklarujemy dynamicznie tablice do, kt�rej wczytamyu nasz plik,
-	int rows = wym2+1;
+	int rows = bdSize+1;
 	double **G;
 	G = new double*[rows];
-	while(rows--) G[rows] = new double[wym1+1];
-
-	cout<<"\n\nNacisnij ENTER aby wczytac tablice o nazwie "<< nazwap;
-	getchar();
+	while(rows--) {
+		G[rows] = new double[bdSize+1];
+	}
+	// cout<<"\n\nNacisnij ENTER aby wczytac tablice o nazwie "<< nazwap;
+	// getchar();
 
 	std::ifstream plik(nazwap.c_str());
 
-	for ( unsigned int i=1;i<wym2+1;i++){
-		for ( unsigned int j=1;j<wym1+1;j++) {
+	for ( unsigned int i=0;i<bdSize;i++){
+		for ( unsigned int j=0;j<bdSize;j++) {
+
 			plik >> G[i][j];
 		}
 	}  
 	plik.close();
 
+	vector<int> obstacles;
+	// j is x axis, i is y axis
 	cout<<"\nWypisujemy na ekran\n\n";
-	for(int i=1;i<wym2+1;i++){
-		for(int j=1;j<wym1+1;j++){
-			cout<<" "<<G[i][j];
+	for(int i=0;i<bdSize;i++){
+		for(int j=0;j<bdSize;j++){
+			if ( G[i][j] == 5){
+				obstacles.push_back(coordToNum(j, i, bdSize));
+			}
 		}
-		cout<<"\n";
+		// cout<<"\n";
+	}
+	for (vector<int>::iterator i = obstacles.begin(); i != obstacles.end(); ++i){
+    	cout << *i << ' ';
 	}
 
 	//na koniec czy�cimy pami�� po naszej tablicy
-	for(int i=0;i<wym2+1;i++){
+	for(int i=0;i<bdSize+1;i++){
 		delete[] G[i];
 	}//czyscimy wiersze
 	delete[] G;//zwalniamy tablice wskaznikow do wierszy

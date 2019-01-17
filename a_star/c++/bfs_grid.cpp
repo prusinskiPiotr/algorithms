@@ -183,8 +183,8 @@ pair<int, int> numToCoord(int id, int bdSize) {
 	return make_pair(x, y);
 }
 
-bool legalCoord(int pos, int bdSize) {
-	if (pos >= 0 && pos < bdSize) {
+bool legalCoord(int xy, int bdSize) {
+	if (xy >= 0 && xy < bdSize) {
 		return true;
 	} else {
 		return false;
@@ -212,6 +212,42 @@ vector<int> genLegalMoves(int id, int bdSize) {
     return newMoves;
 }
 
+vector<int> genObstacles(int bdSize=20, string nazwap="grid.txt", char obstacleChar=5){	
+	//teraz deklarujemy dynamicznie tablice do, kt�rej wczytamyu nasz plik,
+	int rows = bdSize+1;
+	double **G;
+	G = new double*[rows];
+	while(rows--) {
+		G[rows] = new double[bdSize+1];
+	}
+
+	ifstream plik(nazwap.c_str());
+
+	for ( unsigned int i=0;i<bdSize;i++){
+		for ( unsigned int j=0;j<bdSize;j++) {
+			plik >> G[i][j];
+		}
+	}  
+	plik.close();
+
+	vector<int> obstacles;
+	// j is x axis, i is y axis
+	for(int i=0;i<bdSize;i++){
+		for(int j=0;j<bdSize;j++){
+			if ( G[i][j] == obstacleChar){
+				obstacles.push_back(coordToNum(j, i, bdSize));
+			}
+		}
+	}
+
+	//na koniec czy�cimy pami�� po naszej tablicy
+	for(int i=0;i<bdSize+1;i++){
+		delete[] G[i];
+	}//czyscimy wiersze
+	delete[] G;//zwalniamy tablice wskaznikow do wierszy
+    return obstacles;
+}
+
 Graph generateGraph(int bdSize) {
     Graph ktGraph;
 
@@ -230,10 +266,13 @@ Graph generateGraph(int bdSize) {
 }
 
 int main() {
-    Graph grid = generateGraph(20);
+    // Graph grid = generateGraph(20);
 
-    grid = bfs(grid, grid.getVertex(42));
-    traverse(grid.getVertex(27));
-
+    // grid = bfs(grid, grid.getVertex(42));
+    // traverse(grid.getVertex(27));
+    vector<int> przeszkody = genObstacles();
+    for (vector<int>::iterator i = przeszkody.begin(); i != przeszkody.end(); ++i){
+    	cout << *i << ' ';
+	}
     return 0;
 }
