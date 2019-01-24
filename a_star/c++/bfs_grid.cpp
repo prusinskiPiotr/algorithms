@@ -143,11 +143,12 @@ Graph bfs(Graph g, Vertex *start) {
         Vertex *currentVert = vertQueue.front();
         vertQueue.pop();
         for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
-            if (g.vertList[currentVert->getConnections()[nbr]].color == 'w') {
-                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
-                    g.vertList[currentVert->getConnections()[nbr]].color = 'g';
-                    g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
-                    vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
+            Vertex &next = g.vertList[currentVert->getConnections()[nbr]];
+            if (next.color == 'w') {
+                    next.dist = currentVert->dist + 1;
+                    next.color = 'g';
+                    next.pred = currentVert;
+                    vertQueue.push(&next);
             }
         }
         currentVert->color = 'b';
@@ -171,11 +172,12 @@ Graph early_exit(Graph g, Vertex *start, Vertex *goal){
 
         cout << currentVert << endl;
         for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
-            if (g.vertList[currentVert->getConnections()[nbr]].color == 'w') {
-                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
-                    g.vertList[currentVert->getConnections()[nbr]].color = 'g';
-                    g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
-                    vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
+            Vertex &next = g.vertList[currentVert->getConnections()[nbr]];
+            if (next.color == 'w') {
+                    next.dist = currentVert->dist + 1;
+                    next.color = 'g';
+                    next.pred = currentVert;
+                    vertQueue.push(&next);
             }
         }
         currentVert->color = 'b';
@@ -183,6 +185,37 @@ Graph early_exit(Graph g, Vertex *start, Vertex *goal){
 
     return g;
 }
+
+// Graph a_star(Graph g, Vertex *start, Vertex *goal){
+//     start->dist = 0;
+//     start->pred = NULL;
+//     priority_queue<float, Vertex*, greater<float>> vertQueue; //rosnąco
+//     vertQueue.push(start);
+//     while (vertQueue.size() > 0) {
+//         Vertex *currentVert = vertQueue.top();
+//         vertQueue.pop();
+
+//         if (currentVert->getId() == goal->getId()){
+//             break;
+//         }
+
+//         for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
+//             Vertex &next = g.vertList[currentVert->getConnections()[nbr]];
+//             if (next.color == 'w') {
+//                 float new_cost = currentVert->dist + currentVert->getWeight(nbr);
+//                 next.color = 'g';
+//                 cout << new_cost << endl;
+//                 next.dist = currentVert->dist + new_cost;
+//                 next.pred = currentVert;
+//                 double priority = heuristic(start->id, goal->id) + new_cost;
+//                 vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]], priority);
+//             }
+//         }
+//         currentVert->color = 'b';
+//     }
+
+//     return g;
+// }
 
 void traverse(Vertex *y) {
     Vertex *x = y;
@@ -287,6 +320,18 @@ vector<int> genLegalMoves(int id, int bdSize) {
     return newMoves;
 }
 
+double heuristic(int start, int goal){
+    pair<int, int> startCoords = numToCoord(start, 20);
+	int sx = startCoords.first;
+	int sy = startCoords.second;
+
+    pair<int, int> goalCoords = numToCoord(goal, 20);
+    int gx = goalCoords.first;
+    int gy = goalCoords.second;
+
+    return abs(sx - gx) + abs(sy - gy);
+}
+
 Graph generateGraph(int bdSize) {
     Graph ktGraph;
 
@@ -309,11 +354,11 @@ Graph generateGraph(int bdSize) {
 
 int main() {
     Graph grid = generateGraph(20);
-    // grid = bfs(grid, grid.getVertex(399));
-    // traverse(grid.getVertex(0));
+    grid = bfs(grid, grid.getVertex(43));
+    traverse(grid.getVertex(0));
     
-    early_exit(grid, grid.getVertex(0), grid.getVertex(40));
-    traverse(grid.getVertex(40));
+    // early_exit(grid, grid.getVertex(0), grid.getVertex(40));
+    // traverse(grid.getVertex(40));
 
     return 0;
 }
