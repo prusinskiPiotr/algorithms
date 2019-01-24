@@ -144,7 +144,35 @@ Graph bfs(Graph g, Vertex *start) {
         vertQueue.pop();
         for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
             if (g.vertList[currentVert->getConnections()[nbr]].color == 'w') {
-                    g.vertList[currentVert->getConnections()[nbr]].dist;
+                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
+                    g.vertList[currentVert->getConnections()[nbr]].color = 'g';
+                    g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
+                    vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
+            }
+        }
+        currentVert->color = 'b';
+    }
+
+    return g;
+}
+
+Graph early_exit(Graph g, Vertex *start, Vertex *goal){
+    start->dist = 0;
+    start->pred = NULL;
+    queue<Vertex *> vertQueue;
+    vertQueue.push(start);
+    while (vertQueue.size() > 0) {
+        Vertex *currentVert = vertQueue.front();
+        vertQueue.pop();
+
+        if (currentVert->getId() == goal->getId()){
+            break;
+        }
+
+        cout << currentVert << endl;
+        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
+            if (g.vertList[currentVert->getConnections()[nbr]].color == 'w') {
+                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
                     g.vertList[currentVert->getConnections()[nbr]].color = 'g';
                     g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
                     vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
@@ -270,8 +298,7 @@ Graph generateGraph(int bdSize) {
             for (int i = 0; i < newPositions.size(); i++) {
                 int newId = newPositions[i];
                 if (passable(nodeId, bdSize) && passable(newId, bdSize)){
-
-                ktGraph.addEdge(nodeId, newId);
+                    ktGraph.addEdge(nodeId, newId);
                 }
             }
         }
@@ -282,12 +309,11 @@ Graph generateGraph(int bdSize) {
 
 int main() {
     Graph grid = generateGraph(20);
-    grid = bfs(grid, grid.getVertex(399));
-    traverse(grid.getVertex(0));
+    // grid = bfs(grid, grid.getVertex(399));
+    // traverse(grid.getVertex(0));
+    
+    early_exit(grid, grid.getVertex(0), grid.getVertex(40));
+    traverse(grid.getVertex(40));
 
-
-    // for (vector<int>::iterator i = przeszkody.begin(); i != przeszkody.end(); ++i){
-    // 	cout << *i << ' ';
-	// }
     return 0;
 }
