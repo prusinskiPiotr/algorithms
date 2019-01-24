@@ -48,7 +48,7 @@ template <> struct hash<GridLocation> {
   }
 };
 }
-
+ 
 
 struct SquareGrid {
   static std::array<GridLocation, 4> DIRS;

@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 class Vertex {
@@ -56,9 +57,9 @@ public:
 
 ostream &operator<<(ostream &stream, Vertex &vert) {
     vector<int> connects = vert.getConnections();
-    stream << vert.id << " -> ";
+    stream << vert.id << " connects to: ";
     for (unsigned int i = 0; i < connects.size(); i++) {
-        stream << connects[i] << endl << "\t";
+        stream << connects[i] << ", ";
     }
 
     return stream;
@@ -104,6 +105,8 @@ public:
         }
         vertList[f].addNeighbour(t, cost);
         vertList[t].addNeighbour(f, cost);
+
+        // cout << "Vertex: " << f << " is connected to: " << t << " with cost: " << cost << endl;
     }
 
     vector<int> getVertices() {
@@ -139,11 +142,10 @@ Graph bfs(Graph g, Vertex *start) {
     while (vertQueue.size() > 0) {
         Vertex *currentVert = vertQueue.front();
         vertQueue.pop();
-        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size();
-             nbr++) {
+        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
             if (g.vertList[currentVert->getConnections()[nbr]].color == 'w') {
+                    g.vertList[currentVert->getConnections()[nbr]].dist;
                     g.vertList[currentVert->getConnections()[nbr]].color = 'g';
-                    g.vertList[currentVert->getConnections()[nbr]].dist = currentVert->dist + 1;
                     g.vertList[currentVert->getConnections()[nbr]].pred = currentVert;
                     vertQueue.push(&g.vertList[currentVert->getConnections()[nbr]]);
             }
@@ -191,27 +193,6 @@ bool legalCoord(int xy, int bdSize) {
 	}
 }
 
-vector<int> genLegalMoves(int id, int bdSize) {
-	pair<int, int> coords = numToCoord(id, bdSize);
-	int x = coords.first;
-	int y = coords.second;
-
-	vector<int> newMoves;
-	vector<pair<int, int>> myVec = {
-		{0, -1}, {-1, 0}, {0, 1}, {1, 0}
-	};
-
-	for (unsigned int i = 0; i < myVec.size(); i++) {
-		int newX = x + myVec[i].first;
-		int newY = y + myVec[i].second;
-		if (legalCoord(newX, bdSize) && legalCoord(newY, bdSize)) {
-				newMoves.push_back(coordToNum(newX, newY, bdSize));
-		}
-	}
-
-    return newMoves;
-}
-
 vector<int> genObstacles(int bdSize=20, string nazwap="grid.txt", char obstacleChar=5){	
 	//teraz deklarujemy dynamicznie tablice do, kt�rej wczytamyu nasz plik,
 	int rows = bdSize+1;
@@ -248,6 +229,36 @@ vector<int> genObstacles(int bdSize=20, string nazwap="grid.txt", char obstacleC
     return obstacles;
 }
 
+bool passable(int id, int bdSize) {
+    vector<int> obstacles = genObstacles();
+    if (find(obstacles.begin(), obstacles.end(), id) != obstacles.end()){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+vector<int> genLegalMoves(int id, int bdSize) {
+	pair<int, int> coords = numToCoord(id, bdSize);
+	int x = coords.first;
+	int y = coords.second;
+
+	vector<int> newMoves;
+	vector<pair<int, int>> myVec = {
+		{0, -1}, {-1, 0}, {0, 1}, {1, 0}
+	};
+
+	for (unsigned int i = 0; i < myVec.size(); i++) {
+		int newX = x + myVec[i].first;
+		int newY = y + myVec[i].second;
+		if (legalCoord(newX, bdSize) && legalCoord(newY, bdSize)) {
+            newMoves.push_back(coordToNum(newX, newY, bdSize));
+		}
+	}
+
+    return newMoves;
+}
+
 Graph generateGraph(int bdSize) {
     Graph ktGraph;
 
@@ -255,9 +266,13 @@ Graph generateGraph(int bdSize) {
         for (int col = 0; col < bdSize; col++) {
             int nodeId = coordToNum(row, col, bdSize);
             vector<int> newPositions = genLegalMoves(nodeId, bdSize);
+
             for (int i = 0; i < newPositions.size(); i++) {
                 int newId = newPositions[i];
+                if (passable(nodeId, bdSize) && passable(newId, bdSize)){
+
                 ktGraph.addEdge(nodeId, newId);
+                }
             }
         }
     }
@@ -266,13 +281,13 @@ Graph generateGraph(int bdSize) {
 }
 
 int main() {
-    // Graph grid = generateGraph(20);
+    Graph grid = generateGraph(20);
+    grid = bfs(grid, grid.getVertex(399));
+    traverse(grid.getVertex(0));
 
-    // grid = bfs(grid, grid.getVertex(42));
-    // traverse(grid.getVertex(27));
-    vector<int> przeszkody = genObstacles();
-    for (vector<int>::iterator i = przeszkody.begin(); i != przeszkody.end(); ++i){
-    	cout << *i << ' ';
-	}
+
+    // for (vector<int>::iterator i = przeszkody.begin(); i != przeszkody.end(); ++i){
+    // 	cout << *i << ' ';
+	// }
     return 0;
 }
