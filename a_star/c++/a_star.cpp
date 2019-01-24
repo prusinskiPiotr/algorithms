@@ -1,7 +1,6 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <unordered_map>
 #include <queue>
 #include <string>
 #include <vector>
@@ -12,20 +11,16 @@ class Vertex {
 public:
     int id;
     map<int, float> connectedTo;
-    char color;
     float dist;
     Vertex *pred;
 
     Vertex() {
-        // w for white, g for grey, b for black
-        color = 'w';
         dist = 0;
         pred = NULL;
     }
 
     Vertex(int key) {
         id = key;
-        color = 'w';
         dist = 0;
         pred = NULL;
     }
@@ -106,8 +101,6 @@ public:
         }
         vertList[f].addNeighbour(t, cost);
         vertList[t].addNeighbour(f, cost);
-
-        // cout << "Vertex: " << f << " is connected to: " << t << " with cost: " << cost << endl;
     }
 
     vector<int> getVertices() {
@@ -135,57 +128,29 @@ ostream &operator<<(ostream &stream, Graph &grph) {
     return stream;
 }
 
-Graph bfs(Graph g, Vertex *start) {
-    start->dist = 0;
-    start->pred = NULL;
-    queue<Vertex *> vertQueue;
-    vertQueue.push(start);
-    while (vertQueue.size() > 0) {
-        Vertex *currentVert = vertQueue.front();
-        vertQueue.pop();
-        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
-            Vertex &next = g.vertList[currentVert->getConnections()[nbr]];
-            if (next.color == 'w') {
-                    next.dist = currentVert->dist + 1;
-                    next.color = 'g';
-                    next.pred = currentVert;
-                    vertQueue.push(&next);
-            }
-        }
-        currentVert->color = 'b';
+template<typename T, typename priority_t>
+struct PriorityQueue {
+    typedef pair<priority_t, T> PQElement;
+    priority_queue<PQElement, vector<PQElement>, greater<PQElement>> elements;
+
+    inline bool empty() const {
+        return elements.empty();
     }
 
-    return g;
-}
-
-Graph early_exit(Graph g, Vertex *start, Vertex *goal){
-    start->dist = 0;
-    start->pred = NULL;
-    queue<Vertex *> vertQueue;
-    vertQueue.push(start);
-    while (vertQueue.size() > 0) {
-        Vertex *currentVert = vertQueue.front();
-        vertQueue.pop();
-
-        if (currentVert->getId() == goal->getId()){
-            break;
-        }
-
-        cout << currentVert << endl;
-        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
-            Vertex &next = g.vertList[currentVert->getConnections()[nbr]];
-            if (next.color == 'w') {
-                    next.dist = currentVert->dist + 1;
-                    next.color = 'g';
-                    next.pred = currentVert;
-                    vertQueue.push(&next);
-            }
-        }
-        currentVert->color = 'b';
+    inline bool size() const {
+        return elements.size();
     }
 
-    return g;
-}
+    inline void push(T item, priority_t priority) {
+        elements.emplace(priority, item);
+    }
+
+    T get() {
+        T best_item = elements.top().second;
+        elements.pop();
+        return best_item;
+    }
+};
 
 void traverse(Vertex *y) {
     Vertex *x = y;
@@ -322,14 +287,44 @@ Graph generateGraph(int bdSize) {
     return ktGraph;
 }
 
+Graph a_star(Graph g, Vertex *start, Vertex *goal){
+    start->dist = 0;
+    start->pred = NULL;
+    PriorityQueue<Vertex*, float> vertQueue;
+    vertQueue.push(start, 0);
+    while (vertQueue.size() > 0) {
+        Vertex *currentVert = vertQueue.get();
+        // Vertex *currentVert = vertQueue.top();
+        // vertQueue.pop();
+
+        if (currentVert->getId() == goal->getId()){
+            break;
+        }
+    // cost_so_far[current] = currentVert->dist
+    // cost_so_far[next] = next->dist
+        for (unsigned int nbr = 0; nbr < currentVert->getConnections().size(); nbr++) {
+            Vertex &next = g.vertList[currentVert->getConnections()[nbr]];
+            float new_cost = currentVert->dist + currentVert->getWeight(nbr);
+            // if (new_cost < next->dist)
+
+            // redblob if
+            if (cost_so_far.find(next) == cost_so_far.end() || new_cost < cost_so_far[next]) {
+            // endif
+                next.dist = currentVert->dist + new_cost;
+                float priority = heuristic(start->id, goal->id) + new_cost;
+                vertQueue.push(&next, priority);
+                next.pred = currentVert;
+            }
+        }
+    }
+
+    return g;
+}
+
 int main() {
     Graph grid = generateGraph(20);
-    grid = bfs(grid, grid.getVertex(399));
+    grid = a_star(grid, grid.getVertex(0), grid.getVertex(399));
     traverse(grid.getVertex(0));
-    // grid = a_star(grid, grid.getVertex(399), grid.getVertex(0));
-    // traverse(grid.getVertex(399));
-    // early_exit(grid, grid.getVertex(0), grid.getVertex(40));
-    // traverse(grid.getVertex(40));
 
     return 0;
 }
