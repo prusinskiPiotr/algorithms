@@ -2,6 +2,8 @@ def mergeSort(alist):
     print("Splitting ", alist)
     if len(alist) > 1:
         mid = len(alist) // 2
+        # this algorithm performance could be improved
+        # by removing split operator
         lefthalf = alist[:mid]
         righthalf = alist[mid:]
 
