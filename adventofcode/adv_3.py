@@ -25,8 +25,4 @@ A, B = list(set(map(tuple, make_moves(v1)))), list(set(map(tuple, make_moves(v2)
 intersections = set(A).intersection(set(B))
 sorted_distances = sorted([abs(i[0])+abs(i[1]) for i in intersections])
 distance_and_coords = sorted([[abs(i[0])+abs(i[1]),f'x:{i[0]},y:{i[1]}'] for i in intersections])
-
-# print(sorted_distances)
 print(distance_and_coords)
-
-# 2556 is too low
