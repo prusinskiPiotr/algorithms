@@ -4,6 +4,7 @@ def intcode_computer(input_list, input_code):
     n = 0
     param_mode_opcodes = [1, 2, 5 ,6, 7, 8]
     while input_list[n] != 99:
+        # print(f"n:{n}, instruction:{input_list[n]}, param1:{input_list[n+1]}:{input_list[input_list[n+1]]}, param2:{input_list[n+2]}:{input_list[input_list[n+2]]}, param3:{input_list[n+3]}")
         opcode = int(str(input_list[n])[-2:])
         instruction = str(input_list[n])
         param1 = int(instruction[-3]) if len(instruction) > 2 else 0
@@ -11,7 +12,7 @@ def intcode_computer(input_list, input_code):
         if opcode in param_mode_opcodes:
             param1_val = input_list[n+1] if param1 else input_list[input_list[n+1]]
             param2_val = input_list[n+2] if param2 else input_list[input_list[n+2]]
-
+            # print(f"n:{n}, instruction:{input_list[n]}, param1:{input_list[n+1]}:{param1_val}, param2:{input_list[n+2]}:{param2_val}, param3:{input_list[n+3]}")
         if opcode == 1:
             temp = param1_val + param2_val
             input_list[input_list[n+3]] = temp
@@ -27,5 +28,15 @@ def intcode_computer(input_list, input_code):
             temp = input_list[input_list[n+1]]
             n += 2
             print(temp)
+        elif opcode == 5:
+            n = param2_val if param1_val else n + 3
+        elif opcode == 6:
+            n = param2_val if not param1_val else n + 3
+        elif opcode == 7:
+            input_list[input_list[n+3]] = 1 if param1_val < param2_val else 0
+            n += 4
+        elif opcode == 8:
+            input_list[input_list[n+3]] = 1 if param1_val == param2_val else 0
+            n += 4
 
-intcode_computer(initial_list, 1)
+intcode_computer(initial_list, 5)
