@@ -22,7 +22,14 @@ def DFS(G,v,seen=None,path=None):
 G = defaultdict(list)
 for (s,t) in a:
     G[s].append(t)
+    G[t].append(s)
 
-all_paths = DFS(G, 'COM')
-orbits_sum = sum(len(i)-1 for i in all_paths)
-print(orbits_sum)
+longest_depth_paths = DFS(G, 'COM')
+orbits_sum = sum(len(i)-1 for i in longest_depth_paths)
+# print(orbits_sum)
+all_paths = [p for ps in [DFS(G, n) for n in set(G)] for p in ps]
+san = [i for i in all_paths if ('YOU' in i) and ('SAN' in i)]
+print(len(san[0])-3)
+
+# this code is terribly inefficient and takes forever to execute
+# but it gets the result.
